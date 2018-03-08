@@ -10,12 +10,12 @@
 
 #include <stdint.h>
 
-uint8_t pru_i2c_driver_ReadBytes(uint8_t address, uint8_t reg, uint8_t bytes, uint8_t* buffer);
-uint8_t pru_i2c_driver_WriteBytes(uint8_t address, uint8_t reg, uint8_t bytes, uint8_t* buffer);
-uint8_t pru_i2c_driver_ReadReg(uint8_t address, uint8_t reg, uint8_t* buffer);
-uint8_t pru_i2c_driver_WriteReg(uint8_t address, uint8_t reg, uint8_t value);
-void pru_i2c_driver_Set400KHz();
-void pru_i2c_driver_Set100KHz();
-uint8_t pru_i2c_driver_Init();
+uint8_t pru_i2c_driver_ReadBytes(uint8_t i2cDevice, uint8_t address, uint8_t reg, uint8_t bytes, uint8_t* buffer);
+uint8_t pru_i2c_driver_WriteBytes(uint8_t i2cDevice, uint8_t address, uint8_t reg, uint8_t bytes, uint8_t* buffer);
+uint8_t pru_i2c_driver_ReadReg(uint8_t i2cDevice, uint8_t address, uint8_t reg, uint8_t* buffer);
+uint8_t pru_i2c_driver_WriteReg(uint8_t i2cDevice, uint8_t address, uint8_t reg, uint8_t value);
+void pru_i2c_driver_Set400KHz(uint8_t i2cDevice);
+void pru_i2c_driver_Set100KHz(uint8_t i2cDevice);
+uint8_t pru_i2c_driver_Init(uint8_t i2cDevice);
 
 #endif /* PRU_I2C_DRIVER_H_ */
