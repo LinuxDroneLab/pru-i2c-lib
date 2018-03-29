@@ -14,7 +14,7 @@
 volatile pruI2c* CT_I2C[2] = { &CT_I2C1, &CT_I2C2};
 uint32_t* CM_PER_I2C_CLKCTRL[2] = {(uint32_t*) 0x44E00048, (uint32_t*) 0x44E00044};
 
-uint8_t initialized[2] = {0,0};
+uint8_t pru_i2c_initialized[2] = {0,0};
 
 void pru_i2c_driver_DelayMicros(uint8_t micros)
 {
@@ -107,7 +107,7 @@ uint8_t pru_i2c_driver_WaitRDONE(uint8_t i2cDevice)
 
 uint8_t pru_i2c_driver_ReadBytes(uint8_t i2cDevice, uint8_t address, uint8_t reg, uint8_t bytes, uint8_t* buffer)
 {
-    if(!initialized[i2cDevice-1]) {
+    if(!pru_i2c_initialized[i2cDevice-1]) {
         if(!pru_i2c_driver_Init(i2cDevice)) {
             return 0;
         }
@@ -202,7 +202,7 @@ uint8_t pru_i2c_driver_ReadBytes(uint8_t i2cDevice, uint8_t address, uint8_t reg
 
 uint8_t pru_i2c_driver_WriteBytes(uint8_t i2cDevice, uint8_t address, uint8_t reg, uint8_t bytes, uint8_t* buffer)
 {
-    if(!initialized[i2cDevice-1]) {
+    if(!pru_i2c_initialized[i2cDevice-1]) {
         if(!pru_i2c_driver_Init(i2cDevice)) {
             return 0;
         }
@@ -325,7 +325,7 @@ void pru_i2c_driver_Set100KHz(uint8_t i2cDevice)
 }
 
 /*******************************************************************
- * C O N F I G U R A T I O N   O F   I 2 C 2   A N D   C L O C K S *
+ * C O N F I G U R A T I O N   O F   I 2 C   A N D   C L O C K S   *
  *******************************************************************/
 uint8_t pru_i2c_driver_Init(uint8_t i2cDevice) {
     uint32_t * CM_PER_L4LS_CLKSTCTRL = (uint32_t *) 0x44E00000;
@@ -352,7 +352,7 @@ uint8_t pru_i2c_driver_Init(uint8_t i2cDevice) {
     // enable i2c2
     CT_I2C[i2cDevice-1]->I2C_CON_bit.I2C_CON_I2C_EN = 0b1;
     if(pru_i2c_driver_WaitRDONE(i2cDevice)) {
-        initialized[i2cDevice-1]=1;
+        pru_i2c_initialized[i2cDevice-1]=1;
         return 1;
     }
     return 0;
