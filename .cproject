@@ -16,18 +16,18 @@
 				<configuration artifactExtension="lib" artifactName="${ProjName}" buildProperties="" cleanCommand="${CG_CLEAN_CMD}" description="" id="com.ti.ccstudio.buildDefinitions.PRU.Debug.1225770222" name="Debug" parent="com.ti.ccstudio.buildDefinitions.PRU.Debug">
 					<folderInfo id="com.ti.ccstudio.buildDefinitions.PRU.Debug.1225770222." name="/" resourcePath="">
 						<toolChain id="com.ti.ccstudio.buildDefinitions.PRU_2.2.libraryDebugToolchain.986916736" name="TI Build Tools" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.libraryDebugToolchain" targetTool="com.ti.ccstudio.buildDefinitions.PRU_2.2.library.librarianDebug.1526642700">
-							<option id="com.ti.ccstudio.buildDefinitions.core.OPT_TAGS.10022130" superClass="com.ti.ccstudio.buildDefinitions.core.OPT_TAGS" valueType="stringList">
+							<option id="com.ti.ccstudio.buildDefinitions.core.OPT_TAGS.10022130" superClass="com.ti.ccstudio.buildDefinitions.core.OPT_TAGS" useByScannerDiscovery="false" valueType="stringList">
 								<listOptionValue builtIn="false" value="DEVICE_CONFIGURATION_ID=TMS192C2026.AM3359.BeagleBone_Black"/>
 								<listOptionValue builtIn="false" value="DEVICE_ENDIANNESS=little"/>
 								<listOptionValue builtIn="false" value="OUTPUT_FORMAT=ELF"/>
 								<listOptionValue builtIn="false" value="CCS_MBS_VERSION=6.1.3"/>
 								<listOptionValue builtIn="false" value="OUTPUT_TYPE=staticLibrary"/>
 							</option>
-							<option id="com.ti.ccstudio.buildDefinitions.core.OPT_CODEGEN_VERSION.586051355" name="Compiler version" superClass="com.ti.ccstudio.buildDefinitions.core.OPT_CODEGEN_VERSION" value="2.2.1" valueType="string"/>
+							<option id="com.ti.ccstudio.buildDefinitions.core.OPT_CODEGEN_VERSION.586051355" name="Compiler version" superClass="com.ti.ccstudio.buildDefinitions.core.OPT_CODEGEN_VERSION" useByScannerDiscovery="false" value="2.2.1" valueType="string"/>
 							<targetPlatform id="com.ti.ccstudio.buildDefinitions.PRU_2.2.library.targetPlatformDebug.1326869549" name="Platform" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.library.targetPlatformDebug"/>
 							<builder buildPath="${BuildDirectory}" id="com.ti.ccstudio.buildDefinitions.PRU_2.2.library.builderDebug.836172610" keepEnvironmentInBuildfile="false" name="GNU Make" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.library.builderDebug"/>
 							<tool id="com.ti.ccstudio.buildDefinitions.PRU_2.2.library.compilerDebug.2118106171" name="PRU Compiler" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.library.compilerDebug">
-								<option id="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.DEFINE.1817213011" name="Pre-define NAME (--define, -D)" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.DEFINE" valueType="definedSymbols">
+								<option id="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.DEFINE.1817213011" name="Pre-define NAME (--define, -D)" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.DEFINE" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="am3359"/>
 									<listOptionValue builtIn="false" value="pru0"/>
 								</option>
@@ -39,13 +39,14 @@
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.DISPLAY_ERROR_NUMBER.854792829" name="Emit diagnostic identifier numbers (--display_error_number, -pden)" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.DISPLAY_ERROR_NUMBER" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.DIAG_WRAP.1283666023" name="Wrap diagnostic messages (--diag_wrap)" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.DIAG_WRAP" useByScannerDiscovery="false" value="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.DIAG_WRAP.off" valueType="enumerated"/>
-								<option id="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.INCLUDE_PATH.1294986962" name="Add dir to #include search path (--include_path, -I)" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.INCLUDE_PATH" valueType="includePath">
+								<option id="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.INCLUDE_PATH.1294986962" name="Add dir to #include search path (--include_path, -I)" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.INCLUDE_PATH" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="${PRU_SW_PATH}/include"/>
 									<listOptionValue builtIn="false" value="${PRU_SW_PATH}/include/am335x"/>
 									<listOptionValue builtIn="false" value="${PROJECT_ROOT}"/>
 									<listOptionValue builtIn="false" value="${CG_TOOL_ROOT}/include"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.ENDIAN.21126928" name="Specify the endianness of both code and data [See 'General' page to edit] (--endian)" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.ENDIAN" useByScannerDiscovery="false" value="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.ENDIAN.little" valueType="enumerated"/>
+								<option id="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.OPT_FOR_SPEED.1021810632" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.OPT_FOR_SPEED" useByScannerDiscovery="false" value="com.ti.ccstudio.buildDefinitions.PRU_2.2.compilerID.OPT_FOR_SPEED.5" valueType="enumerated"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.PRU_2.2.compiler.inputType__C_SRCS.2091152970" name="C Sources" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.compiler.inputType__C_SRCS"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.PRU_2.2.compiler.inputType__CPP_SRCS.992630739" name="C++ Sources" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.compiler.inputType__CPP_SRCS"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.PRU_2.2.compiler.inputType__ASM_SRCS.1043142698" name="Assembly Sources" superClass="com.ti.ccstudio.buildDefinitions.PRU_2.2.compiler.inputType__ASM_SRCS"/>

@@ -357,3 +357,59 @@ uint8_t pru_i2c_driver_Init(uint8_t i2cDevice) {
     }
     return 0;
 }
+
+/********************************
+ * D A  I M P L E M E N T A R E *
+ ********************************/
+uint8_t pru_i2c_driver_ReadBit(uint8_t i2cDevice, uint8_t address, uint8_t reg, uint8_t bitPos, uint8_t* buffer) {
+    uint8_t b;
+    uint8_t count = pru_i2c_driver_ReadReg(i2cDevice, address, reg, &b);
+    *buffer = b & (1 << bitPos);
+    return count;
+}
+uint8_t pru_i2c_driver_WriteBit(uint8_t i2cDevice, uint8_t address, uint8_t reg, uint8_t bitPos, uint8_t value) {
+    uint8_t b;
+    pru_i2c_driver_ReadReg(i2cDevice, address, reg, &b);
+    b = ((value) ? (b | (1 << bitPos)) : (b & ~(1 << bitPos)));
+    return pru_i2c_driver_WriteReg(i2cDevice, address, reg, b);
+}
+uint8_t pru_i2c_driver_ReadBits(uint8_t i2cDevice, uint8_t address, uint8_t reg, uint8_t bitPos, uint8_t numBits, uint8_t* buffer) {
+    uint8_t count, b;
+    if ((count = pru_i2c_driver_ReadReg(i2cDevice, address, reg, &b)) != 0) {
+        uint8_t mask = ((1 << numBits) - 1) << (bitPos - numBits + 1);
+        b &= mask;
+        b >>= (bitPos - numBits + 1);
+        *buffer = b;
+    }
+    return count;
+}
+uint8_t pru_i2c_driver_WriteBits(uint8_t i2cDevice, uint8_t address, uint8_t reg, uint8_t bitPos, uint8_t numBits, uint8_t value) {
+    uint8_t b;
+    if (pru_i2c_driver_ReadReg(i2cDevice, address, reg, &b) != 0) {
+        uint8_t mask = ((1 << numBits) - 1) << (bitPos - numBits + 1);
+        value <<= (bitPos - numBits + 1); // shift data into correct position
+        value &= mask; // zero all non-important bits in data
+        b &= ~(mask); // zero all important bits in existing byte
+        b |= value; // combine data with existing byte
+        return pru_i2c_driver_WriteReg(i2cDevice, address, reg, b);
+    } else {
+        return 0;
+    }
+}
+
+uint16_t pru_i2c_driver_ReadWord(uint8_t i2cDevice, uint8_t address, uint8_t reg, uint16_t* buffer) {
+    uint8_t msblsb[2];
+    if(pru_i2c_driver_ReadBytes(i2cDevice, address, reg, 2, msblsb)) {
+        ((uint8_t*)buffer)[0] = msblsb[1]; // lsb first
+        ((uint8_t*)buffer)[1] = msblsb[0]; // msb second
+        return 1;
+    }
+    return 0;
+}
+uint16_t pru_i2c_driver_WriteWord(uint8_t i2cDevice, uint8_t address, uint8_t reg, uint16_t value) {
+    uint8_t* value8 = (uint8_t*)(&value);
+    uint8_t lsbmsb[2] = {0};
+    lsbmsb[0] = value8[1]; // msb first
+    lsbmsb[1] = value8[0]; // lsb first
+    return pru_i2c_driver_WriteBytes(i2cDevice, address, reg, 2, lsbmsb);
+}
