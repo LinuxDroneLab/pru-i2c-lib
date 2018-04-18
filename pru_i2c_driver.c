@@ -358,9 +358,6 @@ uint8_t pru_i2c_driver_Init(uint8_t i2cDevice) {
     return 0;
 }
 
-/********************************
- * D A  I M P L E M E N T A R E *
- ********************************/
 uint8_t pru_i2c_driver_ReadBit(uint8_t i2cDevice, uint8_t address, uint8_t reg, uint8_t bitPos, uint8_t* buffer) {
     uint8_t b;
     uint8_t count = pru_i2c_driver_ReadReg(i2cDevice, address, reg, &b);
