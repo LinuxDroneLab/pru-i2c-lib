@@ -136,7 +136,7 @@ uint8_t pru_i2c_driver_ReadBytes(uint8_t i2cDevice, uint8_t address, uint8_t reg
     {
         return 0;
     }
-    pru_i2c_driver_DelayMicros(6);
+    pru_i2c_driver_DelayMicros(4);
 
     if (CT_I2C[i2cDevice-1]->I2C_IRQSTATUS_RAW_bit.I2C_IRQSTATUS_RAW_AERR
             | CT_I2C[i2cDevice-1]->I2C_IRQSTATUS_RAW_bit.I2C_IRQSTATUS_RAW_NACK)
@@ -147,7 +147,7 @@ uint8_t pru_i2c_driver_ReadBytes(uint8_t i2cDevice, uint8_t address, uint8_t reg
     // read data
     CT_I2C[i2cDevice-1]->I2C_CNT_bit.I2C_CNT_DCOUNT = bytes; // bytes to reveive
     CT_I2C[i2cDevice-1]->I2C_CON = 0x8403; // MST/STP/STT
-    pru_i2c_driver_DelayMicros(24);
+    pru_i2c_driver_DelayMicros(12);
     CT_I2C[i2cDevice-1]->I2C_IRQSTATUS_RAW_bit.I2C_IRQSTATUS_RAW_ARDY = 0b1;
 
     // wait data
@@ -184,7 +184,6 @@ uint8_t pru_i2c_driver_ReadBytes(uint8_t i2cDevice, uint8_t address, uint8_t reg
     {
         return 0;
     }
-    pru_i2c_driver_DelayMicros(6);
 
     // wait for bus free
     // wait data
@@ -193,10 +192,6 @@ uint8_t pru_i2c_driver_ReadBytes(uint8_t i2cDevice, uint8_t address, uint8_t reg
         return 0;
     }
 
-    // serve?
-    CT_I2C[i2cDevice-1]->I2C_IRQSTATUS_RAW_bit.I2C_IRQSTATUS_RAW_ARDY = 0b1;
-    CT_I2C[i2cDevice-1]->I2C_IRQSTATUS_RAW_bit.I2C_IRQSTATUS_RAW_XRDY = 1;
-    CT_I2C[i2cDevice-1]->I2C_IRQSTATUS_RAW_bit.I2C_IRQSTATUS_RAW_RRDY = 1;
     return count;
 }
 
@@ -279,31 +274,31 @@ uint8_t pru_i2c_driver_WriteReg(uint8_t i2cDevice, uint8_t address, uint8_t reg,
 void pru_i2c_driver_Set400KHz(uint8_t i2cDevice)
 {
     // prescaler
-    CT_I2C[i2cDevice-1]->I2C_PSC = 0x02; // 24MHz
+    CT_I2C[i2cDevice-1]->I2C_PSC = 0x04; // 24MHz
     /*
-     * tLow = (SCLL +7)*42ns
-     * 42ns is the time period at 24MHz,
+     * tLow = (SCLL +7)*83ns
+     * 83ns is the time period at 48MHz/4(il PSC),
      * tLow = (1000000000ns/400000Hz)/2) is the time period (in ns) at low signal on SCL
-     * SCLL = tLow/42ns -7
-     * SCLL = 1250/42 -7
-     * SCLL is like 23 (rounded)
+     * SCLL = tLow/83ns -7
+     * SCLL = 1250/83 -7
+     * SCLL is like 8.06 (rounded)
      */
-    CT_I2C[i2cDevice-1]->I2C_SCLL = 0x17;
+    CT_I2C[i2cDevice-1]->I2C_SCLL = 0x09; // from linux setting ... check linux driver for calc
     /*
-     * tHigh = (SCLH +5)*42ns
-     * 42ns is the time period at 24MHz,
+     * tHigh = (SCLH +5)*83ns
+     * 83ns is the time period at 48MHz/4,
      * tHigh = (1000000000ns/400000Hz)/2) is the time period (in ns) at high signal on SCL
-     * SCLH = tHigh/42ns -5
-     * SCLH = 1250/42 -5
-     * SCLH is like 25 (rounded)
+     * SCLH = tHigh/83ns -5
+     * SCLH = 1250/83 -5
+     * SCLH is like 10 (rounded)
      */
-    CT_I2C[i2cDevice-1]->I2C_SCLH = 0x19;
+    CT_I2C[i2cDevice-1]->I2C_SCLH = 0x03; // from linux setting ... check linux driver for calc
 }
 
 void pru_i2c_driver_Set100KHz(uint8_t i2cDevice)
 {
     // prescaler
-    CT_I2C[i2cDevice-1]->I2C_PSC = 0x04; // 12MHz
+    CT_I2C[i2cDevice-1]->I2C_PSC = 0x0B; // 12MHz
     /*
      * tLow = (SCLL +7)*83ns
      * 83ns is the time period at 12MHz,
@@ -312,7 +307,7 @@ void pru_i2c_driver_Set100KHz(uint8_t i2cDevice)
      * SCLL = 1250/83 -7
      * SCLL is like 53 (rounded)
      */
-    CT_I2C[i2cDevice-1]->I2C_SCLL = 53;
+    CT_I2C[i2cDevice-1]->I2C_SCLL = 0xD;
     /*
      * tHigh = (SCLH +5)*83ns
      * 83ns is the time period at 12MHz,
@@ -321,17 +316,17 @@ void pru_i2c_driver_Set100KHz(uint8_t i2cDevice)
      * SCLH = 1250/83 - 5
      * SCLH is like 55 (rounded)
      */
-    CT_I2C[i2cDevice-1]->I2C_SCLH = 55;
+    CT_I2C[i2cDevice-1]->I2C_SCLH = 0xF;
 }
 
 /*******************************************************************
  * C O N F I G U R A T I O N   O F   I 2 C   A N D   C L O C K S   *
  *******************************************************************/
 uint8_t pru_i2c_driver_Init(uint8_t i2cDevice) {
-    uint32_t * CM_PER_L4LS_CLKSTCTRL = (uint32_t *) 0x44E00000;
-    (*CM_PER_L4LS_CLKSTCTRL) = ((*CM_PER_L4LS_CLKSTCTRL)
-            | (1 << CLKACTIVITY_I2C_FCLK) | (1 << CLKACTIVITY_L4LS_GCLK))
-            & 0xFFFFFFFC; // CLKTRCTRL = 0x00
+//    uint32_t * CM_PER_L4LS_CLKSTCTRL = (uint32_t *) 0x44E00000;
+//    (*CM_PER_L4LS_CLKSTCTRL) = ((*CM_PER_L4LS_CLKSTCTRL)
+//            | (1 << CLKACTIVITY_I2C_FCLK) | (1 << CLKACTIVITY_L4LS_GCLK))
+//            & 0xFFFFFFFC; // CLKTRCTRL = 0x00
 
     /*
      * FROM: https://e2e.ti.com/support/arm/sitara_arm/f/791/p/458311/1659097

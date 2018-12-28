@@ -471,7 +471,6 @@ typedef struct {
         } I2C_SBLOCK_bit;
     };  // 0xD4 - 0xD7
 
-
 } pruI2c;
 
 volatile __far pruI2c CT_I2C1 __attribute__((cregister("I2C1", near), peripheral));
